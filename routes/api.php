@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackendController;
+use App\Http\Controllers\InfoController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QueriesController;
 use App\Http\Middleware\CheckValueInHeader;
@@ -47,3 +48,8 @@ Route::middleware("jwt.auth")->group(function(){
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
 });
+
+Route::get("/info/message", [InfoController::class, "message"]);
+Route::get("/info/tax/{id}", [InfoController::class, "iva"]);
+Route::get("/info/encrypt/{data}", [InfoController::class, "encrypt"]);
+Route::get("/info/decrypt/{data}", [InfoController::class, "decrypt"]);
