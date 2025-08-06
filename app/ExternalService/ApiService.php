@@ -2,6 +2,7 @@
 
 namespace App\ExternalService;
 
+use App\ExternalService\Events\DataGet;
 use Illuminate\Support\Facades\Http;
 
 class ApiService
@@ -16,6 +17,8 @@ class ApiService
         $response = Http::get($this->url); // para no verificar certificado Http::withoutVerifying()->get
 
         if($response->successful()){
+            event(new DataGet($response->json())); // ejecutar el evento
+
             return $response->json();
         }
 
