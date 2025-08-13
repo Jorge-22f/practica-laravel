@@ -38,7 +38,7 @@ class ProductController extends Controller
 
             return response()->json($product);
         } catch (ValidationException $e) {
-            return response()->json(["error" => $e -> errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json(["errors" => $e -> errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
     }
@@ -58,7 +58,7 @@ class ProductController extends Controller
     public function destroy(Product $product){
         $product->delete();
 
-        return response()->json(["message"=>"producto eliminado"]);
+        return response()->json(['message' => 'Producto eliminado']);
     }
 
     // eliminacion logica

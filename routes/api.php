@@ -39,7 +39,8 @@ Route::get("/query/method/groupby", [QueriesController::class, "groupBy"]);
 
 //Route::apiResource("/product", ProductController::class)->middleware([CheckValueInHeader::class, UpperCaseName::class]);
 
-Route::apiResource("/product", ProductController::class)->middleware(["jwt.auth", LogRequests::class]);
+Route::apiResource("/product", ProductController::class);
+//->middleware(["jwt.auth", LogRequests::class]);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
