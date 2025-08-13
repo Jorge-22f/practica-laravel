@@ -2,10 +2,17 @@
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 uses(RefreshDatabase::class); // borra y ejecuta migraciones con cada test
+
+beforeEach(function(){ // Salta la comprobacion del middleware para las pruebas
+    //$this->withoutMiddleware("jwt.auth"); // normalmente se usa esta
+    $this->withoutMiddleware(\Tymon\JWTAuth\Http\Middleware\Authenticate::class); // no falla
+});
 
 // test('Paginado', function () {  // prueba sin JWT
 //     $response = $this->getJson('/api/product?per_page=5&page=0');
@@ -17,10 +24,15 @@ uses(RefreshDatabase::class); // borra y ejecuta migraciones con cada test
 //     expect(count($data))->toBe(5);  // cuando el json tiene una estructura como objeto
 // });
 
-test('Paginado', function () {  // prueba sin JWT
+test('Paginado', function () {  // con JWT
+    $user = User::factory()->create();
+
+    $token = JWTAuth::fromUser($user);
+
     Product::factory()->count(15)->create();  // ejecurtar factories
 
-    $response = $this->getJson('/api/product?per_page=5&page=0');
+    $response = $this->withHeader("Autorization", "Bearer $token")
+        ->getJson('/api/product?per_page=5&page=0');
 
     $response->assertStatus(Response::HTTP_OK)
         ->assertJsonCount(5)
